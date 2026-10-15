@@ -1,21 +1,73 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowRight, Headphones, LockKeyhole, MessageCircle, ShieldCheck, Sparkles, Volume2 } from 'lucide-react'
 import Link from 'next/link'
+import {
+  ArrowRight,
+  CalendarDays,
+  Check,
+  Headphones,
+  HeartHandshake,
+  LockKeyhole,
+  MessageCircle,
+  Play,
+  ShieldCheck,
+  Sparkles,
+  Wind,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
+type PortalView = 'home' | 'sessions' | 'resources'
+
+const resources = [
+  { title: 'A softer way back to sleep', meta: 'Audio · 8 min', tone: 'violet' },
+  { title: 'When everything feels like too much', meta: 'Guided pause · 4 min', tone: 'green' },
+  { title: 'You are allowed to take up space', meta: 'Reflection · 3 min', tone: 'gold' },
+]
+
 export default function SeekerHome() {
+  const [view, setView] = useState<PortalView>('home')
   const [started, setStarted] = useState(false)
+
   return (
-    <main className="seeker-shell">
-      <header className="seeker-topbar"><Link href="/" className="brand-mark"><span>pb</span><div><strong>PB Wellness</strong><small>A quiet place to begin</small></div></Link><Link href="/login" className="seeker-login">Sign in <ArrowRight /></Link></header>
-      <section className="seeker-hero">
-        <div className="seeker-copy"><p className="eyebrow"><span className="live-dot" /> TALK HOURS · 7–11 PM IST</p><h1>You don&apos;t have to carry it alone.</h1><p className="seeker-lede">Talk to a trained listener who will meet you where you are. No name, number, or explanation needed to start.</p><div className="seeker-actions"><Button className="talk-now-button" onClick={() => setStarted(true)}><MessageCircle data-icon="inline-start" /> Talk now</Button><Link href="#how-it-works" className="quiet-link">How it works <ArrowRight /></Link></div><div className="privacy-line"><LockKeyhole /> Private by default · audio or chat · first talk is free</div></div>
-        <div className="seeker-card"><div className="orb"><Headphones /></div><p className="eyebrow">A HUMAN IS HERE</p><h2>{started ? 'Finding your quiet match…' : 'A few minutes can change the weight of a day.'}</h2><p>{started ? 'You can use an alias. We&apos;ll keep your first step simple.' : 'No pressure to be positive. No pressure to have the right words.'}</p>{started ? <div className="alias-box"><Sparkles /><div><small>Your private alias</small><strong>QuietPine27</strong></div><span className="status-dot" /></div> : <div className="online-row"><span className="status-dot" /> 6 listeners online <span>~2 min wait</span></div>}</div>
-      </section>
-      <section className="seeker-trust" id="how-it-works"><div><ShieldCheck /><strong>Private</strong><span>Use an alias. No call logs.</span></div><div><Volume2 /><strong>Audio-first</strong><span>Chat or talk, your choice.</span></div><div><Sparkles /><strong>Gentle</strong><span>No diagnosis. Just a place to begin.</span></div></section>
-      {started && <div className="seeker-queue"><div className="queue-spinner"><span /><span /><span /></div><div><strong>You&apos;re in the queue.</strong><p>Keep this tab open. We&apos;ll be with you soon.</p></div><Button variant="outline" onClick={() => setStarted(false)}>Leave queue</Button></div>}
+    <main className="portal-shell">
+      <header className="portal-header">
+        <Link href="/" className="brand-mark"><span>pb</span><div><strong>PB Wellness</strong><small>A quiet place to begin</small></div></Link>
+        <nav className="portal-nav" aria-label="Seeker portal navigation">
+          {([['home', 'My space'], ['sessions', 'Sessions'], ['resources', 'Resources']] as const).map(([id, label]) => (
+            <button key={id} className={view === id ? 'portal-nav-active' : ''} onClick={() => setView(id)}>{label}</button>
+          ))}
+        </nav>
+        <Link href="/login" className="seeker-login">Sign out <ArrowRight /></Link>
+      </header>
+
+      <div className="portal-content">
+        {view === 'home' && <>
+          <section className="portal-welcome">
+            <div><p className="eyebrow">THURSDAY · OCTOBER 15</p><h1>Good to see you, QuietPine.</h1><p>There is no right way to feel today. We can start exactly where you are.</p></div>
+            <div className="streak-card"><Sparkles /><strong>3 days</strong><span>of showing up for yourself</span></div>
+          </section>
+
+          <section className="portal-grid">
+            <article className="next-talk-card">
+              <div className="card-kicker"><span className="live-dot" /> LISTENERS ARE HERE</div>
+              <h2>How are you arriving today?</h2>
+              <p>Choose a quiet conversation with a trained listener. You can leave whenever you need.</p>
+              <div className="talk-options"><Button className="talk-now-button" onClick={() => setStarted(true)}><MessageCircle data-icon="inline-start" /> Talk now</Button><button className="audio-option"><Headphones /> Audio</button></div>
+              {started && <div className="queue-confirm"><Check /><span><strong>You&apos;re in the queue.</strong> About 2 minutes to connect.</span><button onClick={() => setStarted(false)}>Leave</button></div>}
+            </article>
+            <article className="checkin-card"><div className="card-icon"><Wind /></div><p className="eyebrow">A SMALL CHECK-IN</p><h2>What would feel supportive?</h2><p>Noticing is enough. You don&apos;t have to solve anything here.</p><div className="checkin-choices"><button>To be heard</button><button>To feel calmer</button><button>Not sure yet</button></div></article>
+          </section>
+
+          <section className="portal-section"><div className="section-heading"><div><p className="eyebrow">FOR YOUR NEXT MOMENT</p><h2>Gentle resources</h2></div><button onClick={() => setView('resources')}>See all <ArrowRight /></button></div><div className="resource-grid">{resources.map((resource) => <article className={`resource-card ${resource.tone}`} key={resource.title}><div className="resource-play"><Play fill="currentColor" /></div><div><h3>{resource.title}</h3><p>{resource.meta}</p></div></article>)}</div></section>
+        </>}
+
+        {view === 'sessions' && <section className="portal-page"><p className="eyebrow">YOUR JOURNEY</p><h1>Sessions</h1><p className="portal-intro">A private record of the moments you chose yourself.</p><div className="session-history"><div className="history-item"><div className="history-icon"><HeartHandshake /></div><div><strong>Talk with Willow</strong><span>Tuesday, October 13 · 24 minutes</span></div><Check /></div><div className="history-item"><div className="history-icon"><MessageCircle /></div><div><strong>Talk with River</strong><span>Sunday, October 11 · 18 minutes</span></div><Check /></div></div></section>}
+
+        {view === 'resources' && <section className="portal-page"><p className="eyebrow">A LITTLE ROOM TO BREATHE</p><h1>Resources</h1><p className="portal-intro">Short, gentle things for the in-between moments.</p><div className="resource-list">{resources.concat([{ title: 'A note for the hard mornings', meta: 'Reflection · 5 min', tone: 'blue' }]).map((resource) => <article className={`resource-card ${resource.tone}`} key={resource.title}><div className="resource-play"><Play fill="currentColor" /></div><div><h3>{resource.title}</h3><p>{resource.meta}</p></div><ArrowRight /></article>)}</div></section>}
+      </div>
+
+      <footer className="portal-footer"><span><LockKeyhole /> Your space is private by default</span><span><ShieldCheck /> No diagnosis. No pressure.</span><Link href="/">Need a different kind of help? <ArrowRight /></Link></footer>
     </main>
   )
 }
