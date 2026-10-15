@@ -42,6 +42,12 @@ export default function SeekerHome() {
       </header>
 
       <div className="portal-content">
+        <section className="account-summary" aria-label="Your wellbeing overview">
+          <div className="summary-stat"><span className="summary-label">TALKS COMPLETED</span><strong>8</strong><small>this month</small></div>
+          <div className="summary-stat"><span className="summary-label">TIME HELD</span><strong>3h 42m</strong><small>with listeners</small></div>
+          <div className="summary-stat"><span className="summary-label">YOUR LISTENER</span><strong>Willow</strong><small>available today</small></div>
+          <div className="summary-stat summary-status"><span className="summary-label">PRIVATE SPACE</span><strong><span className="status-dot" /> Protected</strong><small>only you can see this</small></div>
+        </section>
         {view === 'home' && <>
           <section className="portal-welcome">
             <div><p className="eyebrow">THURSDAY · OCTOBER 15</p><h1>Good to see you, QuietPine.</h1><p>There is no right way to feel today. We can start exactly where you are.</p></div>
