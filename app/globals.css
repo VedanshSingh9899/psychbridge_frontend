@@ -45,6 +45,25 @@ button { cursor: pointer; }
 .setting-card span { min-width:0; flex:1; }.setting-card strong,.setting-card small { display:block; }.setting-card strong { font-size:12px; }.setting-card small { margin-top:5px; color:#858da1; font-size:10px; line-height:1.4; }.setting-card b { color:#82d4ae; font-size:9px; white-space:nowrap; }
 @media (max-width:720px) { .settings-grid { grid-template-columns:1fr; } .desk-notice { right:14px; bottom:14px; left:14px; max-width:none; } }
 
+/* Light theme */
+.light-mode { color-scheme:light; --background:#f5f7fb; --foreground:#202334; --card:#ffffff; --card-foreground:#202334; --popover:#ffffff; --popover-foreground:#202334; --muted:#eef1f7; --muted-foreground:#687086; --border:#dce2ee; --input:#d6ddeb; --accent:#eeeaff; --accent-foreground:#3f376d; background:radial-gradient(circle at 80% -10%,#ebe6ff 0,transparent 32rem),#f5f7fb; color:var(--foreground); }
+.light-mode .sidebar { background:rgba(255,255,255,.97); border-color:#dce2ee; }
+.light-mode .desk-content { color:var(--foreground); }
+.light-mode .topbar { border-color:#e1e5ee; }
+.light-mode .breadcrumbs,.light-mode .subheading,.light-mode .card-heading p,.light-mode .queue-main p,.light-mode .schedule-muted,.light-mode .health-grid small,.light-mode .directory-client span,.light-mode .directory-client small { color:#687086; }
+.light-mode .breadcrumbs strong,.light-mode .nav-item:hover,.light-mode .nav-active { color:#332c59; }
+.light-mode .nav-item { color:#697187; }
+.light-mode .nav-item:hover,.light-mode .nav-active { background:#eeeaff; }
+.light-mode .profile-card,.light-mode .stat-card,.light-mode .queue-card,.light-mode .clients-card,.light-mode .accept-card,.light-mode .period-chip,.light-mode .availability-option,.light-mode .brief-card,.light-mode .directory-client,.light-mode .setting-card,.light-mode .session-panel,.light-mode .client-history-panel { background:#fff; border-color:#dce2ee; }
+.light-mode .profile-card:hover,.light-mode .directory-client:hover,.light-mode .setting-card:hover { background:#f4f1ff; }
+.light-mode .queue-list,.light-mode .schedule-list,.light-mode .health-grid,.light-mode .diagnosis-row,.light-mode .session-top,.light-mode .chat-area,.light-mode .composer { border-color:#e1e5ee; }
+.light-mode .queue-item:hover { background:#f6f7fb; }
+.light-mode .health-grid > div { background:#fff; }
+.light-mode .bottom-note { background:#fff; border-color:#dce2ee; color:#566078; }
+.light-mode .more-menu,.light-mode .top-search { background:#fff; border-color:#dce2ee; color:#202334; }
+.light-mode .session-overlay { background:rgba(42,47,64,.28); }
+.light-mode .chat-area { background:#f6f7fb; }
+
 .placeholder-page { display:none !important; }
 .analytics-page { min-width:0; }
 .analytics-grid { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(260px,.85fr); gap:17px; align-items:start; }
