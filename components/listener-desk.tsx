@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import {
   Activity,
+  BarChart3,
   Bell,
   BookOpen,
   Check,
@@ -49,10 +50,16 @@ export function ListenerDesk() {
   const [activeNav, setActiveNav] = useState('Desk')
   const [note, setNote] = useState('')
   const [ended, setEnded] = useState(false)
+  const [sessionsCompleted, setSessionsCompleted] = useState(0)
+  const [showLogin, setShowLogin] = useState(false)
 
   const queueLabel = useMemo(() => availability === 'Available' ? 'You are visible in the queue' : 'New cases are paused', [availability])
 
   function acceptNext() {
+    if (sessionsCompleted > 0) {
+      setShowLogin(true)
+      return
+    }
     const next = activeQueue[0]
     if (!next) return
     setActiveQueue((items) => items.slice(1))
@@ -62,6 +69,7 @@ export function ListenerDesk() {
 
   function endSession() {
     setEnded(true)
+    setSessionsCompleted((count) => count + 1)
   }
 
   return (
@@ -70,7 +78,7 @@ export function ListenerDesk() {
         <div className="brand-mark"><span>pb</span><div><strong>PB Wellness</strong><small>Listener desk</small></div></div>
         <div className="profile-card"><div className="avatar avatar-lilac">AR</div><div><strong>Aarav R.</strong><small>Supervised listener</small></div><span className="online-dot" /></div>
         <nav className="nav-list" aria-label="Main navigation">
-          {[['Desk', LayoutDashboard], ['My clients', Users], ['Schedule', Clock3], ['Briefs', BookOpen]].map(([label, Icon]) => (
+          {[['Desk', LayoutDashboard], ['Analytics', BarChart3], ['My clients', Users], ['Schedule', Clock3], ['Briefs', BookOpen]].map(([label, Icon]) => (
             <button className={`nav-item ${activeNav === label ? 'nav-active' : ''}`} key={label as string} onClick={() => setActiveNav(label as string)}><Icon /><span>{label as string}</span>{label === 'Briefs' && <b>2</b>}</button>
           ))}
         </nav>
@@ -95,8 +103,10 @@ export function ListenerDesk() {
             <aside className="right-column"><section className="accept-card"><div className="accept-glow" /><div className="card-heading"><div><p className="eyebrow">NEXT UP</p><h2>{activeQueue[0]?.alias ?? 'No one waiting'}</h2></div><span className="priority-label">Priority</span></div>{activeQueue[0] ? <><div className="greet-box"><Sparkles /><div><strong>Before you accept</strong><p>{activeQueue[0].kind} · {activeQueue[0].lang} · {activeQueue[0].wait} wait</p></div></div><Button className="accept-button" onClick={acceptNext}><HeartHandshake data-icon="inline-start" /> Accept next <span>↵</span></Button><p className="accept-note">Skip returns them to the front. No one is dropped.</p></> : <div className="empty-queue">You are all caught up.<br />Take a breather.</div>}</section><section className="clients-card"><div className="card-heading"><div><h2>My clients</h2><p>Your owned cases, kept private.</p></div><button className="text-button">View all <ChevronRight /></button></div><div className="client-list">{clients.map((client) => <div className="client-row" key={client.alias}><div className="avatar avatar-small">{client.alias.slice(0, 2)}</div><div className="client-info"><strong>{client.alias}</strong><span>{client.lang} · {client.time}</span></div><div className="client-risk"><RiskBadge risk={client.risk} /><small>{client.hop}</small></div></div>)}</div></section></aside>
           </div>
           <div className="bottom-note"><ShieldCheck /> <span><strong>Listener, not doctor.</strong> No diagnosis or medication advice here.</span><button>Read boundaries</button></div>
-        </> : <div className="placeholder-page"><div className="placeholder-icon"><BookOpen /></div><h2>{activeNav}</h2><p>This part of the desk is ready for the next pilot step.</p><Button variant="outline" onClick={() => setActiveNav('Desk')}>Back to desk</Button></div>}
+        </> : activeNav === 'Analytics' ? <section className="analytics-page"><div className="page-heading"><div><p className="eyebrow">YOUR IMPACT</p><h1>Work that grows trust.</h1><p className="subheading">A private view of your listening work and psychologist handoffs.</p></div><div className="period-chip">Last 30 days <ChevronRight /></div></div><div className="stats-row"><div className="stat-card"><div className="stat-icon purple"><HeartHandshake /></div><div><span>Sessions completed</span><strong>24</strong><small><span className="trend-up">+18%</span> from last month</small></div></div><div className="stat-card"><div className="stat-icon green"><Users /></div><div><span>People supported</span><strong>19</strong><small>16 first conversations</small></div></div><div className="stat-card"><div className="stat-icon gold"><ShieldCheck /></div><div><span>Psychologist handoffs</span><strong>7</strong><small>All reviewed by supervision</small></div></div></div><div className="analytics-grid"><section className="queue-card impact-card"><div className="card-heading"><div><h2>Support activity</h2><p>Your completed listening sessions by week.</p></div><BarChart3 /></div><div className="bar-chart" aria-label="Support activity chart"><div className="bar-group"><span style={{height: '42%'}} /><small>W1</small></div><div className="bar-group"><span style={{height: '65%'}} /><small>W2</small></div><div className="bar-group"><span style={{height: '53%'}} /><small>W3</small></div><div className="bar-group"><span style={{height: '82%'}} /><small>W4</small></div></div></section><section className="queue-card handoff-card"><div className="card-heading"><div><h2>With psychologists</h2><p>Recent collaboration and next steps.</p></div></div><div className="handoff-row"><div className="avatar avatar-small">DN</div><div><strong>Dr. Nisha Mehta</strong><span>3 cases reviewed · Today</span></div><RiskBadge risk="High" /></div><div className="handoff-row"><div className="avatar avatar-small">DK</div><div><strong>Dr. Kabir Shah</strong><span>2 cases reviewed · Yesterday</span></div><RiskBadge risk="Medium" /></div><div className="handoff-row"><div className="avatar avatar-small">SC</div><div><strong>Supervision circle</strong><span>Weekly reflection · Monday</span></div><RiskBadge risk="Low" /></div></section></div><div className="bottom-note"><ShieldCheck /> <span><strong>Your notes stay private.</strong> Analytics show patterns, never conversation content.</span><button>Privacy details</button></div></section> : <div className="placeholder-page"><div className="placeholder-icon"><BookOpen /></div><h2>{activeNav}</h2><p>This part of the desk is ready for the next pilot step.</p><Button variant="outline" onClick={() => setActiveNav('Desk')}>Back to desk</Button></div>}
       </section>
+
+      {showLogin && <div className="session-overlay" role="dialog" aria-modal="true" aria-label="Listener sign in"><div className="login-prompt"><button className="close-session" onClick={() => setShowLogin(false)} aria-label="Close sign in"><X /></button><div className="placeholder-icon"><ShieldCheck /></div><p className="eyebrow">WELCOME BACK</p><h2>Sign in to keep listening.</h2><p>Your first conversation is always open. Create an account to continue helping people, keep your private notes, and see your impact over time.</p><input aria-label="Email address" placeholder="Email address" type="email" /><Button onClick={() => setShowLogin(false)}>Continue with email</Button><small>We only use your account to protect your work and supervision history.</small></div></div>}
 
       {session && <div className="session-overlay" role="dialog" aria-modal="true" aria-label="Active listening session"><div className="session-panel"><div className="session-top"><button className="close-session" onClick={() => setSession(null)} aria-label="Close session"><X /></button><div className="session-state"><span className="status-dot" /> Session live</div><span className="session-timer">06:42 <small>left</small></span></div><div className="session-person"><div className="avatar avatar-large">{session.alias.slice(0, 2)}</div><div><p className="eyebrow">ANONYMOUS SESSION</p><h2>{session.alias}</h2><p>{session.lang} · {session.kind} · <RiskBadge risk={session.risk} /></p></div></div><div className="session-safety"><ShieldCheck /><span>Private by default. No names, photos, or phone numbers.</span></div><div className="chat-area"><div className="chat-time">Today, 9:14 PM</div><div className="bubble bubble-them">Hi. I don't really know where to start.</div><div className="bubble bubble-me">That&apos;s okay. We can take it one small step at a time. I&apos;m here to listen.</div><div className="bubble bubble-them">I&apos;ve been carrying a lot this week.</div>{ended && <div className="ended-note"><Check /> Session ended. Add a private note below.</div>}</div>{ended ? <div className="wrap-area"><label htmlFor="private-note">Private end-note <span>Only visible to you</span></label><textarea id="private-note" value={note} onChange={(event) => setNote(event.target.value)} placeholder="What would be useful to remember?" /><div className="wrap-actions"><Button variant="outline" onClick={() => setSession(null)}>Close case</Button><Button onClick={() => setSession(null)}>Save & close</Button></div></div> : <div className="composer"><button aria-label="Voice message"><Phone /></button><input placeholder="Write a gentle reply..." /><button className="send-button" aria-label="Send"><ChevronRight /></button></div>}<div className="session-footer"><span><ShieldCheck /> Listener, not doctor</span>{!ended && <Button variant="outline" onClick={endSession}>End session</Button>}</div></div></div>}
     </main>
