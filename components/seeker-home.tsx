@@ -48,6 +48,12 @@ export default function SeekerHome() {
             <div className="streak-card"><Sparkles /><strong>3 days</strong><span>of showing up for yourself</span></div>
           </section>
 
+          <section className="portal-stats" aria-label="Your progress">
+            <div><span>SESSIONS COMPLETED</span><strong>4</strong><small>+2 this month</small></div>
+            <div><span>TIME FOR YOURSELF</span><strong>1h 18m</strong><small>Across 6 check-ins</small></div>
+            <div><span>PROFILE PROGRESS</span><strong>72%</strong><small>Almost there</small></div>
+          </section>
+
           <section className="portal-grid">
             <article className="next-talk-card">
               <div className="card-kicker"><span className="live-dot" /> LISTENERS ARE HERE</div>
