@@ -14,6 +14,8 @@ import {
   LayoutDashboard,
   MessageCircle,
   MoreHorizontal,
+  PanelLeftClose,
+  PanelLeftOpen,
   Pause,
   Phone,
   Search,
@@ -53,6 +55,7 @@ export function ListenerDesk() {
   const [sessionsCompleted, setSessionsCompleted] = useState(0)
   const [showLogin, setShowLogin] = useState(false)
   const [selectedClient, setSelectedClient] = useState<(typeof clients)[number] | null>(null)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
   const queueLabel = useMemo(() => availability === 'Available' ? 'You are visible in the queue' : 'New cases are paused', [availability])
 
@@ -75,18 +78,18 @@ export function ListenerDesk() {
 
   return (
     <main className="listener-shell">
-      <aside className="sidebar">
-        <div className="brand-mark"><span>pb</span><div><strong>PB Wellness</strong><small>Listener desk</small></div></div>
-        <div className="profile-card"><div className="avatar avatar-lilac">AR</div><div><strong>Aarav R.</strong><small>Supervised listener</small></div><span className="online-dot" /></div>
+      <aside className={`sidebar ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+        <div className="brand-mark"><span>pb</span><div className="sidebar-label"><strong>PB Wellness</strong><small>Listener desk</small></div><button className="sidebar-toggle" onClick={() => setSidebarCollapsed((collapsed) => !collapsed)} aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}>{sidebarCollapsed ? <PanelLeftOpen /> : <PanelLeftClose />}</button></div>
+        <div className="profile-card"><div className="avatar avatar-lilac">AR</div><div className="sidebar-label"><strong>Aarav R.</strong><small>Supervised listener</small></div><span className="online-dot" /></div>
         <nav className="nav-list" aria-label="Main navigation">
           {[['Desk', LayoutDashboard], ['Analytics', BarChart3], ['My clients', Users], ['Schedule', Clock3], ['Briefs', BookOpen]].map(([label, Icon]) => (
-            <button className={`nav-item ${activeNav === label ? 'nav-active' : ''}`} key={label as string} onClick={() => setActiveNav(label as string)}><Icon /><span>{label as string}</span>{label === 'Briefs' && <b>2</b>}</button>
+            <button className={`nav-item ${activeNav === label ? 'nav-active' : ''}`} key={label as string} onClick={() => setActiveNav(label as string)} aria-label={label as string}><Icon /><span className="sidebar-label">{label as string}</span>{label === 'Briefs' && <b className="sidebar-label">2</b>}</button>
           ))}
         </nav>
         <div className="sidebar-spacer" />
-        <div className="supervision-card"><div className="mini-icon"><ShieldCheck /></div><div><strong>Supervision is on</strong><p>Ask for help anytime.</p></div><ChevronRight /></div>
-        <button className="nav-item"><Settings2 /><span>Settings</span></button>
-        <div className="sidebar-footer"><span className="status-dot" /> All systems calm <span>v1 pilot</span></div>
+        <div className="supervision-card"><div className="mini-icon"><ShieldCheck /></div><div className="sidebar-label"><strong>Supervision is on</strong><p>Ask for help anytime.</p></div><ChevronRight /></div>
+        <button className="nav-item" aria-label="Settings"><Settings2 /><span className="sidebar-label">Settings</span></button>
+        <div className="sidebar-footer"><span className="status-dot" /><span className="sidebar-label">All systems calm</span><span className="sidebar-label">v1 pilot</span></div>
       </aside>
 
       <section className="desk-content">
