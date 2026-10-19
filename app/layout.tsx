@@ -3,8 +3,8 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'PB Wellness — Listener Desk',
-  description: 'A calm, private desk for supervised listeners.',
+  title: 'PB Wellness — Private care network',
+  description: 'A calm, private workspace for listeners, coordinators and care teams.',
   generator: 'v0.app',
   icons: {
     icon: [

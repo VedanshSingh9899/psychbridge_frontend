@@ -40,7 +40,7 @@ export default function LoginPage() {
           </form>
           <div className="login-divider"><span>or</span></div>
           <Button variant="outline" className="guest-button" asChild><Link href="/seeker"><LockKeyhole data-icon="inline-start" /> Continue as seeker</Link></Button>
-          <p className="login-footer">By continuing, you agree to our privacy-first care guidelines.</p>
+          <p className="login-footer">New to PB Wellness? <Link href="/register">Create a workspace</Link></p><p className="login-footer">By continuing, you agree to our privacy-first care guidelines.</p>
         </div>
       </section>
     </main>
